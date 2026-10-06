@@ -121,9 +121,9 @@ def test_write_text_creates_parents_and_writes_utf8(tmp_path: Path) -> None:
     """Markdown and CSV exports are written as UTF-8 under new directories."""
     destination = tmp_path / "exports" / "report.md"
 
-    write_text(destination, "# Café report\n")
+    write_text(destination, "# Caf\u00e9 report\n")
 
-    assert destination.read_text(encoding="utf-8") == "# Café report\n"
+    assert destination.read_text(encoding="utf-8") == "# Caf\u00e9 report\n"
 
 
 def test_write_text_reports_an_unwritable_destination(tmp_path: Path) -> None:

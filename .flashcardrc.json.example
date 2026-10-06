@@ -1,0 +1,11 @@
+{
+  "deck": "data/http_status_codes.json",
+  "mode": "adaptive",
+  "limit": 10,
+  "color": true,
+  "show_answer": true,
+  "timer": true,
+  "log_level": "WARNING",
+  "progress_file": ".flashcard_progress.json",
+  "export_dir": "exports"
+}

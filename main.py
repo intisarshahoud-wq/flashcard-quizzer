@@ -297,7 +297,7 @@ def show_stats(console: Console, deck: Deck, store: ProgressStore) -> int:
     for card, record in answered:
         front = card.front
         if len(front) > width:
-            front = front[: width - 1] + "…"
+            front = front[: width - 1] + "\u2026"
         console.write(
             f"{front:<{width}}  {record.seen:>4}  {record.correct:>5}  "
             f"{record.accuracy * 100:>7.1f}%"

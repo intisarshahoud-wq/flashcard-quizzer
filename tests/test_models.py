@@ -24,8 +24,8 @@ def test_normalize_answer(raw: str, expected: str) -> None:
 
 def test_normalize_answer_unifies_unicode_forms() -> None:
     """Visually identical strings in different Unicode forms compare equal."""
-    precomposed = "café"
-    decomposed = "café"
+    precomposed = "caf\u00e9"
+    decomposed = "cafe\u0301"
 
     assert precomposed != decomposed
     assert normalize_answer(precomposed) == normalize_answer(decomposed)

@@ -162,7 +162,28 @@ def test_shipped_sample_decks_load() -> None:
     should fail the suite rather than only showing up at runtime.
     """
     repo_root = Path(__file__).resolve().parent.parent
-    for name, expected_cards in (("glossary.json", 10), ("python_basics.json", 8)):
+    expected = {
+        "glossary.json": 10,
+        "python_basics.json": 8,
+        "http_status_codes.json": 16,
+    }
+    for name, expected_cards in expected.items():
         deck = load_deck(repo_root / "data" / name)
         assert len(deck) == expected_cards
         assert deck.warnings == ()
+
+
+def test_custom_deck_accepts_its_alternative_answers() -> None:
+    """The bundled HTTP deck grades both spellings it advertises.
+
+    The pipe syntax is only useful if the shipped deck really exercises it,
+    so this asserts against the file rather than a fixture.
+    """
+    repo_root = Path(__file__).resolve().parent.parent
+    deck = load_deck(repo_root / "data" / "http_status_codes.json")
+    by_front = {card.front: card for card in deck.cards}
+
+    assert by_front["401"].matches("Unauthorized") is True
+    assert by_front["401"].matches("unauthorised") is True
+    assert by_front["429"].matches("  RATE   limited ") is True
+    assert by_front["500"].matches("oops") is False

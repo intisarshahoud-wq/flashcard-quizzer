@@ -189,7 +189,7 @@ def test_stats_truncates_a_long_question(
     )
 
     assert exit_code == 0
-    assert "…" in capsys.readouterr().out
+    assert "\u2026" in capsys.readouterr().out
 
 
 def test_stats_conflicts_with_no_progress(

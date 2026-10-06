@@ -10,7 +10,6 @@ __pycache__/
 # Testing
 .pytest_cache/
 .coverage
-htmlcov/
 
 # IDE
 .vscode/
@@ -22,9 +21,8 @@ Thumbs.db
 
 # Logs
 *.log
-# Coverage HTML output
-htmlcov/
-coverage.xml
+# Coverage output. htmlcov/ and coverage.xml are committed on purpose:
+# the project brief asks for a coverage report as a deliverable.
 
 # mypy
 .mypy_cache/
