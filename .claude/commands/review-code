@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+"""
+Review Code Command
+A Claude slash command to help students get code reviews from AI.
+"""
+
+import sys
+import argparse
+
+def main():
+    parser = argparse.ArgumentParser(description='Generate a code review prompt for Claude')
+    parser.add_argument('--file', '-f', help='File to review (provide path)')
+    parser.add_argument('--focus', '-o', help='Specific focus areas for review', 
+                       choices=['security', 'performance', 'readability', 'testing', 'design', 'all'],
+                       default='all')
+    parser.add_argument('--code', '-c', help='Code snippet to review (use quotes)')
+    
+    args = parser.parse_args()
+    
+    if not args.file and not args.code:
+        print("❌ Error: Please provide either --file or --code")
+        sys.exit(1)
+    
+    # Focus area descriptions
+    focus_descriptions = {
+        'security': 'Security vulnerabilities and potential attack vectors',
+        'performance': 'Performance optimizations and efficiency improvements',
+        'readability': 'Code clarity, naming conventions, and maintainability',
+        'testing': 'Testability and test coverage opportunities',
+        'design': 'Design patterns, architecture, and code organization',
+        'all': 'All aspects: security, performance, readability, testing, and design'
+    }
+    
+    # Generate the prompt for Claude
+    prompt = f"""
+Please review this code with focus on: {focus_descriptions[args.focus]}
+
+Code to review:
+"""
+    
+    if args.file:
+        prompt += f"[Please paste the contents of {args.file}]"
+    else:
+        prompt += f"{args.code}"
+    
+    prompt += f"""
+
+Review criteria:
+- Code correctness and logic
+- {focus_descriptions[args.focus]}
+- Python best practices and PEP 8 compliance
+- Error handling and edge cases
+- Documentation and comments
+- Potential improvements
+
+Please provide:
+1. Overall assessment
+2. Specific issues found (if any)
+3. Concrete improvement suggestions
+4. Positive aspects worth highlighting
+
+Format your response with clear sections and actionable feedback.
+"""
+    
+    print("🔍 Code review prompt generated:")
+    print("=" * 50)
+    print(prompt)
+    print("=" * 50)
+    print("\nNext steps:")
+    print("1. Copy the code you want reviewed")
+    print("2. Paste it into the prompt above")
+    print("3. Submit to Claude for review")
+    print("4. Document the review in your AI edit log")
+
+if __name__ == "__main__":
+    main()

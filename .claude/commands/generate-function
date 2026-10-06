@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+"""
+Generate Function Command
+A Claude slash command to help students generate well-structured Python functions.
+"""
+
+import sys
+import argparse
+
+def main():
+    parser = argparse.ArgumentParser(description='Generate a Python function with proper structure')
+    parser.add_argument('function_name', help='Name of the function to generate')
+    parser.add_argument('--description', '-d', help='Description of what the function does')
+    parser.add_argument('--params', '-p', help='Parameters (comma-separated)', default='')
+    parser.add_argument('--return-type', '-r', help='Return type', default='None')
+    parser.add_argument('--class-method', '-c', action='store_true', help='Generate as a class method')
+    
+    args = parser.parse_args()
+    
+    # Generate the prompt for Claude
+    prompt = f"""
+Generate a Python function with these specifications:
+
+Function name: {args.function_name}
+Description: {args.description or 'A function that performs a specific task'}
+Parameters: {args.params or 'No parameters specified'}
+Return type: {args.return_type}
+Class method: {args.class_method}
+
+Requirements:
+- Include proper type hints
+- Add comprehensive docstring with description, parameters, return value, and examples
+- Include error handling for edge cases
+- Follow Python naming conventions
+- Add basic input validation where appropriate
+- Include usage examples in the docstring
+
+Please provide a complete, well-documented function that follows Python best practices.
+"""
+    
+    print("🤖 Generating function with Claude...")
+    print("=" * 50)
+    print(prompt)
+    print("=" * 50)
+    print("\nRemember to:")
+    print("1. Review the generated code carefully")
+    print("2. Test with various inputs")
+    print("3. Modify as needed for your specific use case")
+    print("4. Add to your AI edit log")
+
+if __name__ == "__main__":
+    main()

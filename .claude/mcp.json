@@ -1,0 +1,128 @@
+{
+  "mcpServers": {
+    "python": {
+      "command": "python",
+      "args": ["-m", "mcp.server.stdio"],
+      "description": "Python interpreter and execution environment",
+      "env": {
+        "PYTHONPATH": "."
+      }
+    },
+    "shell": {
+      "command": "bash",
+      "args": ["-c"],
+      "description": "Shell command execution for development tasks",
+      "env": {
+        "PATH": "/usr/local/bin:/usr/bin:/bin"
+      }
+    }
+  },
+  "tools": {
+    "development": {
+      "pytest": {
+        "command": "pytest",
+        "description": "Run Python unit tests",
+        "args": ["--verbose", "--tb=short"]
+      },
+      "coverage": {
+        "command": "pytest",
+        "description": "Run tests with coverage reporting",
+        "args": ["--cov=.", "--cov-report=html", "--cov-report=term"]
+      },
+      "format": {
+        "command": "black",
+        "description": "Format Python code with Black",
+        "args": ["."]
+      },
+      "sort_imports": {
+        "command": "isort",
+        "description": "Sort and organize imports",
+        "args": ["."]
+      },
+      "lint": {
+        "command": "flake8",
+        "description": "Check code for style and syntax issues",
+        "args": ["."]
+      },
+      "typecheck": {
+        "command": "mypy",
+        "description": "Perform static type checking",
+        "args": ["."]
+      }
+    }
+  },
+  "shortcuts": {
+    "test": {
+      "description": "Run all tests",
+      "command": "pytest"
+    },
+    "check": {
+      "description": "Run all code quality checks",
+      "command": "black . && isort . && flake8 . && mypy ."
+    },
+    "full-check": {
+      "description": "Run comprehensive checks and tests",
+      "command": "black . && isort . && flake8 . && mypy . && pytest --cov=. --cov-report=term"
+    }
+  },
+  "project": {
+    "name": "AI-Assisted Development Project",
+    "description": "A Python project for learning AI-assisted software development",
+    "language": "python",
+    "version": "1.0.0",
+    "author": "Student",
+    "main": "main.py",
+    "test_directory": "tests",
+    "source_directories": [".", "utils"],
+    "exclude_patterns": ["venv", "__pycache__", "*.pyc", ".git", "data"]
+  },
+  "ai_assistance": {
+    "contexts": {
+      "code_generation": {
+        "description": "Generate new Python code",
+        "include_files": ["utils/*.py", "main.py"],
+        "exclude_files": ["tests/*", "data/*"]
+      },
+      "testing": {
+        "description": "Generate or review test code",
+        "include_files": ["tests/*.py", "utils/*.py"],
+        "focus": "unit testing, test coverage, edge cases"
+      },
+      "debugging": {
+        "description": "Debug issues and errors",
+        "include_files": ["*.py"],
+        "focus": "error analysis, root cause identification"
+      },
+      "refactoring": {
+        "description": "Improve existing code structure",
+        "include_files": ["*.py"],
+        "focus": "design patterns, code organization, maintainability"
+      }
+    },
+    "quality_checks": {
+      "security": {
+        "enabled": true,
+        "tools": ["bandit", "safety"]
+      },
+      "performance": {
+        "enabled": true,
+        "focus": "algorithm efficiency, memory usage"
+      },
+      "maintainability": {
+        "enabled": true,
+        "focus": "code readability, documentation, modularity"
+      }
+    }
+  },
+  "documentation": {
+    "style": "google",
+    "include_examples": true,
+    "include_type_hints": true,
+    "focus_areas": [
+      "function parameters and return values",
+      "class and method purposes",
+      "usage examples",
+      "error conditions"
+    ]
+  }
+}

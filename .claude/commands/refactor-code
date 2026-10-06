@@ -1,0 +1,85 @@
+#!/usr/bin/env python3
+"""
+Refactor Code Command
+A Claude slash command to help students refactor code with AI assistance.
+"""
+
+import sys
+import argparse
+
+def main():
+    parser = argparse.ArgumentParser(description='Generate a refactoring prompt for Claude')
+    parser.add_argument('--goal', '-g', help='Refactoring goal', required=True,
+                       choices=['design-pattern', 'performance', 'readability', 
+                              'modularity', 'testing', 'security', 'maintainability'])
+    parser.add_argument('--pattern', '-p', help='Specific design pattern to implement')
+    parser.add_argument('--constraints', '-c', help='Constraints or requirements')
+    
+    args = parser.parse_args()
+    
+    # Goal descriptions
+    goal_descriptions = {
+        'design-pattern': 'implement a specific design pattern',
+        'performance': 'optimize for better performance',
+        'readability': 'improve code readability and clarity',
+        'modularity': 'improve code organization and modularity',
+        'testing': 'make code more testable',
+        'security': 'address security concerns',
+        'maintainability': 'improve long-term maintainability'
+    }
+    
+    # Generate the prompt for Claude
+    prompt = f"""
+I need help refactoring this code to {goal_descriptions[args.goal]}.
+
+Current code:
+[Please paste your code here]
+
+Refactoring goal: {goal_descriptions[args.goal]}
+"""
+    
+    if args.pattern:
+        prompt += f"Specific pattern to implement: {args.pattern}\n"
+    
+    if args.constraints:
+        prompt += f"Constraints: {args.constraints}\n"
+    
+    prompt += f"""
+Requirements:
+- Maintain existing functionality
+- Improve code according to the specified goal
+- Follow Python best practices
+- Include clear explanations of changes made
+- Ensure backward compatibility where possible
+
+Please provide:
+1. Refactored code with improvements
+2. Explanation of changes made and why
+3. Benefits of the refactoring
+4. Any trade-offs or considerations
+5. Testing suggestions for the refactored code
+
+If implementing a design pattern, please:
+- Explain when and why to use this pattern
+- Show how it improves the code structure
+- Provide usage examples
+"""
+    
+    print("🔄 Refactoring prompt generated:")
+    print("=" * 50)
+    print(prompt)
+    print("=" * 50)
+    print("\nRefactoring checklist:")
+    print("1. ✅ Understand the current code structure")
+    print("2. ✅ Clear refactoring goals and success criteria")
+    print("3. ✅ Consider backward compatibility")
+    print("4. ✅ Plan for testing the refactored code")
+    print("5. ✅ Document the refactoring rationale")
+    print("\nAfter refactoring:")
+    print("1. Test thoroughly to ensure functionality is preserved")
+    print("2. Update any dependent code")
+    print("3. Update documentation")
+    print("4. Record the refactoring in your AI edit log")
+
+if __name__ == "__main__":
+    main()

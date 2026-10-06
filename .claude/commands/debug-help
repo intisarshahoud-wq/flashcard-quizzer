@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""
+Debug Help Command
+A Claude slash command to help students debug issues with AI assistance.
+"""
+
+import sys
+import argparse
+
+def main():
+    parser = argparse.ArgumentParser(description='Generate a debugging prompt for Claude')
+    parser.add_argument('--error', '-e', help='Error message you received', required=True)
+    parser.add_argument('--expected', '-x', help='What you expected to happen')
+    parser.add_argument('--actual', '-a', help='What actually happened')
+    parser.add_argument('--context', '-c', help='Additional context about the issue')
+    
+    args = parser.parse_args()
+    
+    # Generate the prompt for Claude
+    prompt = f"""
+I'm experiencing a bug in my Python code and need help debugging it.
+
+Error message:
+{args.error}
+
+Expected behavior:
+{args.expected or 'Not specified'}
+
+Actual behavior:
+{args.actual or 'Not specified'}
+
+Additional context:
+{args.context or 'None provided'}
+
+Code causing the issue:
+[Please paste your code here]
+
+Environment:
+- Python version: [specify your Python version]
+- Relevant libraries: [list any relevant libraries and versions]
+- Operating system: [specify your OS]
+
+Please help me:
+1. Identify the root cause of the issue
+2. Provide a specific solution
+3. Explain why this error occurred
+4. Suggest how to prevent similar issues in the future
+5. Recommend any testing approaches to catch this type of bug
+
+If you need more information to help debug, please ask specific questions.
+"""
+    
+    print("🐛 Debugging prompt generated:")
+    print("=" * 50)
+    print(prompt)
+    print("=" * 50)
+    print("\nBefore submitting:")
+    print("1. ✅ Add your actual code to the prompt")
+    print("2. ✅ Include full error traceback if available")
+    print("3. ✅ Specify your Python version and OS")
+    print("4. ✅ Provide any relevant library versions")
+    print("5. ✅ Include steps to reproduce the issue")
+    print("\nAfter getting help:")
+    print("1. Test the suggested solution")
+    print("2. Understand why the bug occurred")
+    print("3. Add the debugging session to your AI edit log")
+    print("4. Consider writing a test to prevent regression")
+
+if __name__ == "__main__":
+    main()
