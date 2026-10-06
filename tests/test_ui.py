@@ -145,6 +145,7 @@ def test_end_of_input_ends_the_session() -> None:
     """Ctrl+D or a closed pipe ends the quiz instead of raising."""
 
     def closed() -> str:
+        """Stand in for a closed input stream (Ctrl+D or Ctrl+Z)."""
         raise EOFError
 
     console = Console(io.StringIO(), color=False, input_fn=closed)

@@ -338,6 +338,7 @@ class AdaptiveMode(QuizMode):
         """Return the deck ordered hardest-first."""
 
         def sort_key(indexed: tuple[int, Flashcard]) -> tuple[float, int]:
+            """Return a sort key of negated difficulty, then deck position."""
             index, card = indexed
             score = self._oracle.difficulty(card.key)
             score += self._rng.uniform(-self.JITTER, self.JITTER)
@@ -378,6 +379,7 @@ class SpacedRepetitionMode(QuizMode):
         """Return the deck ordered most-overdue first, hardest breaking ties."""
 
         def sort_key(indexed: tuple[int, Flashcard]) -> tuple[float, float, int]:
+            """Return a sort key of negated urgency, difficulty, then position."""
             index, card = indexed
             return (
                 -self._oracle.due_score(card.key),

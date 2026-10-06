@@ -262,6 +262,7 @@ def test_seed_makes_a_random_run_reproducible(
     )
 
     def ask_order() -> list[str]:
+        """Run one seeded quiz and return the questions in the order asked."""
         monkeypatch.setattr("builtins.input", lambda: "x")
         main.run(
             [

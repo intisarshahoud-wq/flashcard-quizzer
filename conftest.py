@@ -103,6 +103,7 @@ def write_deck(tmp_path: Path) -> Callable[[Any, str], Path]:
     """
 
     def _write(payload: Any, name: str = "deck.json") -> Path:
+        """Write ``payload`` to ``name`` under tmp_path and return the path."""
         path = tmp_path / name
         text = payload if isinstance(payload, str) else json.dumps(payload)
         path.write_text(text, encoding="utf-8")

@@ -96,6 +96,7 @@ def test_session_survives_a_keyboard_interrupt(cards: list[Flashcard]) -> None:
         """A provider that answers once, then raises KeyboardInterrupt."""
 
         def __init__(self) -> None:
+            """Start with no questions answered."""
             self.calls = 0
 
         def ask(self, card: Flashcard, number: int, total: int | None) -> str | None:
@@ -121,15 +122,19 @@ def test_observers_receive_the_whole_session(cards: list[Flashcard]) -> None:
         """An observer that notes the name of each event it receives."""
 
         def on_session_start(self, deck_name: str, mode: str, total: int) -> None:
+            """Note the session banner."""
             events.append(f"start:{deck_name}:{mode}:{total}")
 
         def on_question(self, card: Flashcard, number: int) -> None:
+            """Note the question number."""
             events.append(f"question:{number}")
 
         def on_answer(self, result: Any) -> None:
+            """Note whether the answer was accepted."""
             events.append(f"answer:{result.correct}")
 
         def on_session_end(self, stats: Any) -> None:
+            """Note how many questions were answered."""
             events.append(f"end:{stats.total_questions}")
 
     subject = SessionSubject([Recorder()])
@@ -157,6 +162,7 @@ def test_one_broken_observer_does_not_stop_the_quiz(
         """An observer that fails on every answer."""
 
         def on_answer(self, result: Any) -> None:
+            """Fail, to prove one bad observer cannot end the quiz."""
             raise RuntimeError("observer is broken")
 
     seen: list[bool] = []
@@ -165,6 +171,7 @@ def test_one_broken_observer_does_not_stop_the_quiz(
         """An observer that records answers normally."""
 
         def on_answer(self, result: Any) -> None:
+            """Record the outcome so the test can assert it arrived."""
             seen.append(result.correct)
 
     subject = SessionSubject([Exploding(), Healthy()])
@@ -321,6 +328,7 @@ def test_cli_exits_cleanly_on_ctrl_c(
     deck = write_deck([{"front": "API", "back": "Interface"}], "interrupt.json")
 
     def interrupt() -> str:
+        """Stand in for the user pressing Ctrl+C at the prompt."""
         raise KeyboardInterrupt
 
     monkeypatch.setattr("builtins.input", interrupt)
