@@ -1,0 +1,14 @@
+[flake8]
+# Black owns formatting; E203 and W503 disagree with it by design.
+max-line-length = 88
+extend-ignore = E203, W503
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    htmlcov,
+    .pytest_cache,
+    .mypy_cache
+max-complexity = 10
+per-file-ignores =
+    tests/*:D103

@@ -1,0 +1,55 @@
+[project]
+name = "flashcard-quizzer"
+version = "1.0.0"
+description = "A modular, pattern-driven flashcard quiz application for the terminal."
+requires-python = ">=3.10"
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+# The starter's .claude/ helpers ship as extensionless scripts; leave them as
+# the course authors wrote them.
+extend-exclude = "venv|htmlcov|[.]claude"
+
+[tool.isort]
+profile = "black"
+line_length = 88
+skip = ["venv", "htmlcov", ".claude"]
+skip_gitignore = true
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+warn_unreachable = true
+exclude = "^(venv|htmlcov)/"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers --strict-config"
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+branch = true
+source = ["."]
+omit = ["venv/*", "tests/*", "htmlcov/*", "setup.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+    '@(abc\.)?abstractmethod',
+]
+
+[tool.bandit]
+exclude_dirs = ["venv", "tests", "htmlcov"]
+
+# ctypes.windll exists only on Windows. The attribute access needs an ignore to
+# type-check on Linux, and that same ignore is redundant on Windows, so unused
+# ignores are tolerated in this one module to keep both platforms clean.
+[[tool.mypy.overrides]]
+module = "ui"
+warn_unused_ignores = false

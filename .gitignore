@@ -22,3 +22,13 @@ Thumbs.db
 
 # Logs
 *.log
+# Coverage HTML output
+htmlcov/
+coverage.xml
+
+# mypy
+.mypy_cache/
+
+# Local quiz progress (user state, not source)
+.flashcard_progress.json
+exports/

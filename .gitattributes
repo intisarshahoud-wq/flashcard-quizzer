@@ -1,0 +1,8 @@
+# Normalize line endings in the repository; check out native on each platform.
+* text=auto
+
+*.py   text diff=python
+*.md   text
+*.json text
+*.cfg  text
+*.toml text
