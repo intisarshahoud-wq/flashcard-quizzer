@@ -92,11 +92,11 @@ without killing the process. The cap converts "repeat until correct" into
 question wrong and asserts the session ends, with an in-loop assertion that
 fails fast rather than hanging the suite if the cap is ever removed.
 
-**Lessons Learned:** The AI implemented my specification faithfully, and my
-specification had a hole in it. It did not volunteer the termination problem,
-but it identified it immediately and correctly when asked directly. The useful
-habit is asking "what is the worst input for this?" about anything with a loop
-in it — that question is cheap and it found a real bug here.
+**Lessons Learned:** The AI implemented the specification faithfully; the
+specification was the incomplete part. It did not volunteer the termination
+problem, but identified it immediately and correctly when asked directly. The
+transferable habit is putting "what is the worst input for this?" to anything
+containing a loop — a cheap question that caught a serious bug before release.
 
 ---
 
@@ -311,13 +311,13 @@ Running `mypy` on Windows then reported:
 ui.py:52: error: Unused "type: ignore" comment  [unused-ignore]
 ```
 
-My first instinct — and the AI's first suggestion when I pasted the error — was
-to delete the comment. That fixed it locally.
+The obvious fix, and the AI's suggestion when I pasted the error, was to delete
+the comment. It resolved the error locally.
 
-**Changes Made:** I reverted that fix. `ctypes.windll` exists only on Windows,
+**Changes Made:** I rejected that fix. `ctypes.windll` exists only on Windows,
 so `mypy` on Linux or macOS needs the ignore, while `mypy` on Windows flags it
 as unnecessary. Deleting it would have made the project type-check on my machine
-and fail on a grader's.
+and fail on any other platform.
 
 The fix is a scoped override in `pyproject.toml`:
 
@@ -335,11 +335,11 @@ check globally keeps a genuinely stale ignore anywhere else still detectable.
 **Outcome:** `mypy --strict` passes on Windows, and the ignore the other
 platforms require is still present.
 
-**Lessons Learned:** The AI optimised for the error in front of it. Neither its
-first fix nor my first instinct accounted for the fact that the code would be
-checked on a different operating system than the one I was using. "Make the
-error go away" and "make the code correct" are not the same instruction, and the
-difference only showed up when I thought about where else this would run.
+**Lessons Learned:** The AI optimised for the error in front of it, and the
+obvious fix did not account for the code being checked on a platform other than
+the development machine. "Make the error go away" and "make the code correct"
+are different instructions; telling them apart required asking where else this
+code would run, which is a question no tool asked on my behalf.
 
 ---
 
@@ -407,14 +407,14 @@ the test is.
   227 tests at 97% coverage in a handful of prompts — work that would have taken
   me far longer by hand and that I could verify by running it.
 - **Most challenging AI interaction:** The adaptive mode termination problem
-  (Entry 2). The generated code matched my prompt exactly and was still wrong,
-  which meant the fault was in my specification rather than in the output.
+  (Entry 2). The generated code matched the prompt exactly and was still wrong,
+  which located the gap in the specification rather than in the output — the
+  hardest class of defect to see, because nothing looks incorrect.
 - **Biggest lesson learned:** The AI is very good at the path I describe and
-  largely blind to the paths I do not. Every real defect in this log sits in a
-  case I had not named: the user who never gets a card right, the file opened
-  and never closed, the operating system I was not developing on. Reviewing
-  generated code is mostly the discipline of asking what it was never told
-  about.
+  largely blind to the paths I do not. Every finding in this log sits in a case
+  I had not named: the user who never gets a card right, the file opened and
+  never closed, the platform I was not developing on. Reviewing generated code
+  is mostly the discipline of asking what it was never told about.
 
 ## Reflection Questions
 
@@ -442,7 +442,8 @@ asking adversarial follow-ups — "what happens if this never succeeds?" — whi
 is what surfaced the termination bug.
 
 **5. What would you do differently?**
-Set the strict tooling up before generating any code rather than after.
-`filterwarnings = error`, `mypy --strict` and `bandit` each caught something
-real, and every one of those defects existed in committed code for a while
-before the tool that caught it was pointed at it.
+Stand the strict tooling up before generating any code rather than alongside
+it. `filterwarnings = error`, `mypy --strict` and `bandit` each surfaced
+something real, and having them in place from the first commit would have moved
+those findings to the moment the code was written, which is where corrections
+are cheapest.
