@@ -120,7 +120,9 @@ class QuizMode(ABC):
         if limit is not None and limit <= 0:
             raise ValueError("Question limit must be a positive whole number.")
         self._cards: tuple[Flashcard, ...] = tuple(cards)
-        self._rng = rng or random.Random()
+        # Card order is a usability concern, not a security one; see the
+        # note in main.run_quiz.
+        self._rng = rng or random.Random()  # nosec B311
         self._oracle: DifficultyOracle = oracle or NullOracle()
         self._limit = limit
         self._asked = 0

@@ -31,7 +31,7 @@ filterwarnings = ["error"]
 [tool.coverage.run]
 branch = true
 source = ["."]
-omit = ["venv/*", "tests/*", "htmlcov/*", "setup.py"]
+omit = ["venv/*", "tests/*", "htmlcov/*", "conftest.py"]
 
 [tool.coverage.report]
 show_missing = true

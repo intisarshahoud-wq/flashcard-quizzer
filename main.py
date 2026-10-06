@@ -22,9 +22,9 @@ from typing import Final, Sequence
 
 from config import AppConfig, ConfigError, load_config
 from data_loader import Deck, FlashcardLoadError, load_deck
-from models import SessionStats
+from models import Flashcard, SessionStats
 from observers import LoggingObserver, ProgressObserver, SessionSubject
-from progress_store import ProgressStore
+from progress_store import CardProgress, ProgressStore
 from quiz_engine import DifficultyOracle, NullOracle, QuizModeFactory, QuizSession
 from stats_reporter import (
     EXPORT_FORMATS,
@@ -203,6 +203,7 @@ def configure_logging(level: str, log_file: Path | None) -> None:
     root = logging.getLogger()
     for existing in list(root.handlers):
         root.removeHandler(existing)
+        existing.close()
     root.addHandler(handler)
     root.setLevel(getattr(logging, level, logging.WARNING))
 
@@ -282,8 +283,11 @@ def show_stats(console: Console, deck: Deck, store: ProgressStore) -> int:
         console.write(store.load_warning, "yellow")
     console.rule()
 
-    tracked = [(card, store.records.get(card.key)) for card in deck.cards]
-    answered = [(card, record) for card, record in tracked if record and record.seen]
+    answered: list[tuple[Flashcard, CardProgress]] = []
+    for card in deck.cards:
+        record = store.records.get(card.key)
+        if record is not None and record.seen:
+            answered.append((card, record))
     if not answered:
         console.write("No cards from this deck have been answered yet.")
         return 0
@@ -291,7 +295,6 @@ def show_stats(console: Console, deck: Deck, store: ProgressStore) -> int:
     width = min(44, max(len(card.front) for card, _ in answered))
     console.write(f"{'Card':<{width}}  {'Seen':>4}  {'Right':>5}  {'Accuracy':>8}")
     for card, record in answered:
-        assert record is not None  # narrowed by the filter above
         front = card.front
         if len(front) > width:
             front = front[: width - 1] + "…"
@@ -357,7 +360,9 @@ def run_quiz(
         CliError: If the mode or limit is rejected by the engine.
     """
     oracle: DifficultyOracle = store if store is not None else NullOracle()
-    rng = random.Random(config.seed)
+    # Shuffling a flashcard deck is not a security decision, so the
+    # reproducibility of a seeded Mersenne Twister is the point, not a flaw.
+    rng = random.Random(config.seed)  # nosec B311
     try:
         mode = QuizModeFactory.create(
             config.mode, deck.cards, rng=rng, oracle=oracle, limit=config.limit
