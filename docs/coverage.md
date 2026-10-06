@@ -26,7 +26,7 @@ main.py                   168      6     38      2    96%   283, 381, 443-446
 models.py                  76      0     14      0   100%
 observers.py               75      5     10      2    89%   75, 79->exit, 84-85, 92, 175
 progress_store.py         137      1     40      3    98%   90->92, 108, 169->164
-quiz_engine.py            185      5     28      2    97%   52, 56, 81, 151, 393->exit, 437
+quiz_engine.py            185      5     28      2    97%   52, 56, 81, 151, 395->exit, 439
 stats_reporter.py          87      0     24      0   100%
 ui.py                      75      0     18      0   100%
 utils/__init__.py           0      0      0      0   100%
